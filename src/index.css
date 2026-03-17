@@ -4,3 +4,7 @@ body{
  font-family: system-ui, sans-serif;
  background-color: #f9fafb;
 }
+.dark{
+ background:#111;
+ color:white;
+}

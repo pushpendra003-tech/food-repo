@@ -1,25 +1,30 @@
 import { create } from "zustand"
 
-interface CartItem{
+type Item={
  id:number
  name:string
  price:number
+ img:string
 }
 
-interface CartState{
-
- items:CartItem[]
-
- addItem:(item:CartItem)=>void
-
+type CartState={
+ cart:Item[]
+ addToCart:(item:Item)=>void
+ removeFromCart:(id:number)=>void
 }
 
-export const useCartStore = create<CartState>((set)=>({
+export const useCartStore=create<CartState>((set)=>({
 
- items:[],
+ cart:[],
 
- addItem:(item)=>set((state)=>({
-  items:[...state.items,item]
+ addToCart:(item)=>
+ set((state)=>({
+  cart:[...state.cart,item]
+ })),
+
+ removeFromCart:(id)=>
+ set((state)=>({
+  cart:state.cart.filter(i=>i.id!==id)
  }))
 
 }))
