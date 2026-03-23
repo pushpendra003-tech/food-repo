@@ -1,34 +1,50 @@
 import { create } from "zustand"
+import { persist, createJSONStorage } from "zustand/middleware"
 
-type Food = {
- id:number
- name:string
+export interface FavoriteFood {
+  id: number
+  name: string
+  price: number
+  img: string
+  rating: number
 }
 
-type FavState = {
- favs:Food[]
- toggleFav:(food:Food)=>void
+interface FavoriteState {
+  favorites: FavoriteFood[]
+  toggleFavorite: (food: FavoriteFood) => void
+  isFavorite: (id: number) => boolean
+  removeFavorite: (id: number) => void
+  clearFavorites: () => void
 }
 
-export const useFavStore = create<FavState>((set)=>({
+export const useFavoriteStore = create<FavoriteState>()(
+  persist(
+    (set, get) => ({
+      favorites: [],
+      toggleFavorite: (food) => {
+        const current = get().favorites
+        const exists = current.find(f => f.id === food.id)
+        
+        if (exists) {
+          set({ favorites: current.filter(f => f.id !== food.id) })
+        } else {
+          set({ favorites: [...current, food] })
+        }
+      },
+      isFavorite: (id) => {
+        return get().favorites.some(f => f.id === id)
+      },
+      removeFavorite: (id) => {
+        set((state) => ({
+          favorites: state.favorites.filter(f => f.id !== id)
+        }))
+      },
+      clearFavorites: () => set({ favorites: [] })
+    }),
+    {
+      name: 'favorite-storage',
+      storage: createJSONStorage(() => localStorage)
+    }
+  )
+)
 
- favs:[],
-
- toggleFav:(food)=>
- set((state)=>{
-
-  const exists = state.favs.find(f=>f.id===food.id)
-
-  if(exists){
-   return{
-    favs:state.favs.filter(f=>f.id!==food.id)
-   }
-  }
-
-  return{
-   favs:[...state.favs,food]
-  }
-
- })
-
-}))

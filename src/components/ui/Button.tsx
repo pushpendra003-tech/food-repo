@@ -5,7 +5,8 @@ interface Props {
   
   }
   
-  export default function Button({children,onClick}:Props){
+export function Button({children,onClick}:Props){
+
   
     return(
   

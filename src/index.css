@@ -1,10 +1,42 @@
 @import "tailwindcss";
 
-body{
- font-family: system-ui, sans-serif;
- background-color: #f9fafb;
+@layer base {
+  * {
+    transition: all 0.2s ease-in-out;
+  }
+  
+  body {
+    font-family: system-ui, sans-serif;
+    background-color: #f9fafb;
+    @apply dark:bg-gray-900 dark:text-gray-100;
+  }
 }
-.dark{
- background:#111;
- color:white;
+
+@layer components {
+  .glass {
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.5);
+  }
+  
+  .dark .glass {
+    background: rgba(31,41,55,0.8);
+    border: 1px solid rgba(75,85,99,0.5);
+  }
+
+  .dark .text-gray-600 {
+    @apply text-gray-200;
+  }
+
+  .dark .text-gray-500 {
+    @apply text-gray-300;
+  }
+
+  .dark .text-gray-400 {
+    @apply text-gray-400;
+  }
+  
+  .dark .placeholder-gray-400 {
+    @apply placeholder-gray-400;
+  }
 }

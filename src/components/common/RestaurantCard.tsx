@@ -17,7 +17,7 @@ interface Props{
    
       <div className="p-4">
    
-       <h3 className="font-semibold text-lg">
+       <h3 className="font-bold text-black text-lg mb-2 line-clamp-1">
         {name}
        </h3>
    

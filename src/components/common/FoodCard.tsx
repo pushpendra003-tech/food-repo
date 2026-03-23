@@ -1,61 +1,55 @@
-import { motion } from "framer-motion"
-import { Heart } from "lucide-react"
-import { useState } from "react"
-import { useCartStore } from "../../store/cartStore"
+import { Heart, Star } from "lucide-react"
+import { useFavoriteStore } from '../../store/favoriteStore'
+import { useCallback } from 'react'
 
-export default function FoodCard({id,name,price,img}:any){
+export default function FoodCard({food, addToCart}: {food: any, addToCart: (food: any) => void}) {
+  const { toggleFavorite: toggleFav, isFavorite: isFav } = useFavoriteStore()
 
- const addToCart=useCartStore((s)=>s.addToCart)
-
- const [fav,setFav]=useState(false)
 
  return(
 
- <motion.div
+ <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition">
 
- initial={{opacity:0,y:40}}
- animate={{opacity:1,y:0}}
- whileHover={{scale:1.05}}
- transition={{duration:0.4}}
+  <div className="relative">
 
- className="bg-white shadow rounded-lg overflow-hidden"
+   <img src={food.img} className="h-48 w-full object-cover"/>
 
- >
+   <Heart
+    onClick={()=>toggleFav(food)}
+    className={`absolute top-3 right-3 cursor-pointer ${
+     isFav(food.id)
+     ? "text-red-500 fill-red-500"
+     : "text-white"
+    }`}
+   />
 
- <img src={img} className="h-40 w-full object-cover"/>
+  </div>
 
- <div className="p-4">
+  <div className="p-4">
 
- <div className="flex justify-between">
+   <div className="flex justify-between">
 
- <h2 className="font-bold">{name}</h2>
+   <h2 className="font-bold text-black text-lg mb-2 line-clamp-1">{food.name}</h2>
 
- <Heart
- className={`cursor-pointer ${fav?"text-red-500":"text-gray-400"}`}
- onClick={()=>setFav(!fav)}
- />
+    <div className="flex text-yellow-500">
+     <Star size={16}/>
+     {food.rating}
+    </div>
+
+   </div>
+
+   <p className="text-orange-500">₹{food.price}</p>
+
+   <button
+    onClick={()=>addToCart(food)}
+    className="mt-3 w-full bg-orange-500 text-white py-2 rounded"
+   >
+    Add to Cart
+   </button>
+
+  </div>
 
  </div>
-
- <p className="text-orange-500 mt-2">
- ₹{price}
- </p>
-
- <motion.button
-
- whileTap={{scale:0.9}}
-
- onClick={()=>addToCart({id,name,price,img})}
-
- className="mt-3 bg-orange-500 text-white px-4 py-2 rounded"
-
- >
- Add to Cart
- </motion.button>
-
- </div>
-
- </motion.div>
 
  )
 }
